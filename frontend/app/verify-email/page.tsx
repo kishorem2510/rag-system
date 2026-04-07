@@ -5,10 +5,10 @@ import AuthShell from "@/components/auth/AuthShell";
 import { confirmEmail, register } from "@/lib/auth";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, Suspense } from "react";
 import { Loader2 } from "lucide-react";
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -138,5 +138,13 @@ export default function VerifyEmailPage() {
         </button>
       </form>
     </AuthShell>
+  );
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyEmailContent />
+    </Suspense>
   );
 }
