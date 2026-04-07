@@ -1,12 +1,12 @@
-import * as path from "path";
 import * as cdk from "aws-cdk-lib";
-import { Construct } from "constructs";
-import * as s3 from "aws-cdk-lib/aws-s3";
+import * as apigwv2 from "aws-cdk-lib/aws-apigatewayv2";
+import * as integrations from "aws-cdk-lib/aws-apigatewayv2-integrations";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as nodejs from "aws-cdk-lib/aws-lambda-nodejs";
-import * as apigwv2 from "aws-cdk-lib/aws-apigatewayv2";
-import * as integrations from "aws-cdk-lib/aws-apigatewayv2-integrations";
+import * as s3 from "aws-cdk-lib/aws-s3";
+import { Construct } from "constructs";
+import * as path from "path";
 
 export class InfraStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -24,7 +24,11 @@ export class InfraStack extends cdk.Stack {
             s3.HttpMethods.GET,
             s3.HttpMethods.HEAD,
           ],
-          allowedOrigins: [frontendUrl],
+          allowedOrigins: [
+      "http://localhost:3000",
+      "https://rag-system-azure.vercel.app",
+        // ← covers ALL your preview URLs
+    ],
           allowedHeaders: ["*"],
         },
       ],
@@ -146,7 +150,11 @@ uploadBucket.grantRead(askQuestionFn);
           apigwv2.CorsHttpMethod.GET,
           apigwv2.CorsHttpMethod.DELETE,
         ],
-        allowOrigins: [frontendUrl],
+        allowOrigins: [
+      "http://localhost:3000",
+      "https://rag-system-azure.vercel.app",
+        // ← covers ALL your preview URLs
+    ],
       },
     });
 
